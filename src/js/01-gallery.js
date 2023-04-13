@@ -23,7 +23,7 @@ const markup = galleryItems.map(({ preview: url, description: alt,  original: ur
     </li>`).join('')
 
 ulEl.insertAdjacentHTML("beforeend", markup); 
-    let gallerySimLight = new SimpleLightbox('.gallery a', {
+        new SimpleLightbox('.gallery a', {
         captionsData: 'alt',
         captionDelay: 250
     });

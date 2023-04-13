@@ -1,37 +1,51 @@
 import throttle from 'lodash.throttle';
 
 const form = document.querySelector('.feedback-form');
+const STORAGEKEY = "feedback-form-state";
 
-const objectForm = {
-    email:'',
-    message:''
-};
+saveSettings();
 
-form.addEventListener('input',onInput);
+form.addEventListener('input', throttle(onInput),500);
 
 form.addEventListener('submit',onSubmit);
 
 function onInput(evt){
+    const {email:emailEvt, message:messageEvt} = evt.currentTarget.elements;
 
-    if (evt.target.name==='email'){
-        objectForm.email=evt.target.value;
-
-    }else if (evt.target.name==='message'){
-        objectForm.message=evt.target.value;
-    };
+    const objectForm = {
+        email:emailEvt.value,
+        message:messageEvt.value};
 
     const setLocalStorage = function (objectForm){
-        localStorage.setItem("feedback-form-state", JSON.stringify(objectForm))
+        localStorage.setItem(STORAGEKEY, JSON.stringify(objectForm));
     }
-    throttle(setLocalStorage(objectForm),500);
+    setLocalStorage(objectForm);
+
 }
 
 function onSubmit(evt){
     evt.preventDefault();
-    const objectForm = JSON.parse(localStorage.getItem('feedback-form-state'));
+    const {
+        elements: { email, message }
+        } = evt.currentTarget;
 
-    console.log(objectForm);
+      if (!email.value || !message.value) {
+        return console.log('Заповніть всі поля');
+      }
+    const objectFormEvent = JSON.parse(localStorage.getItem(STORAGEKEY));
+
+    console.log(objectFormEvent);
     evt.currentTarget.reset();
-    localStorage.removeItem("feedback-form-state");
+    localStorage.removeItem(STORAGEKEY);
+
+}
+
+function saveSettings(){
+    const {email, message} = JSON.parse(localStorage.getItem(STORAGEKEY)) || {}; 
+
+    if (email){form.email.value = email};
+        
+    if (message){form.message.value = message};
+    
 
 }
