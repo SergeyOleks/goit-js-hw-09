@@ -12,7 +12,7 @@ const dataMinutes = document.querySelector('span[data-minutes]');
 const dataSeconds = document.querySelector('span[data-seconds]');
 
 const dateNow = new Date();
-const KEY = "selectDate";
+let selectDate;
 
 counterDesign();
 
@@ -27,11 +27,10 @@ const options = {
     if (selectedDates[0] <= dateNow) {
       alert('Please choose a date in the future');
     } else {
-      const selectDate = selectedDates[0];
+      selectDate = selectedDates[0];
 
       buttonStart.disabled = false;
-      localStorage.removeItem(KEY);
-      localStorage.setItem(KEY, JSON.stringify(selectDate));
+  
       dateTimeValue.selectedDates = selectedDates;
     }
   },
@@ -52,13 +51,17 @@ function counterDesign(){
 buttonStart.addEventListener('click', onClick);
 
 function onClick(){
-    const selectDate = Date.parse(JSON.parse(localStorage.getItem(KEY)));
-    setInterval(()=>{
+    const int = setInterval(()=>{
         const { days, hours, minutes, seconds } = convertMs(selectDate - new Date());
-        dataDays.textContent = days.toString().padStart(2,'0');
-        dataHours.textContent = hours.toString().padStart(2,'0');
-        dataMinutes.textContent = minutes.toString().padStart(2,'0');
-        dataSeconds.textContent = seconds.toString().padStart(2,'0');
+        if (seconds<0 ){
+          clearInterval(int);
+        }else{
+          dataDays.textContent = days.toString().padStart(2,'0');
+          dataHours.textContent = hours.toString().padStart(2,'0');
+          dataMinutes.textContent = minutes.toString().padStart(2,'0');
+          dataSeconds.textContent = seconds.toString().padStart(2,'0');
+        }
+
     },1000);
 }
 

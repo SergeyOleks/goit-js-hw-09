@@ -14,32 +14,32 @@ function onStart(evt){
 
   let {amount:{value:amount}, delay:{value:delay}, step:{value:step}} = evt.target.elements;
 
- amount = Number(amount); 
- delay = Number(delay);
- step = Number(step);
+  amount = Number(amount); 
+  delay = Number(delay);
+  step = Number(step);
  
- for (let i = 1; i<=amount; i+=1){
-
-    const delayStep = delay+step*(i-1); 
-    const promise = createPromise(i, delayStep);
-  
-    promise
-      .then(value=>Notify.success(value))
-      .catch(err=>Notify.failure(err));
+ for (let i = 1; i<=amount; i+=1){    
+    setTimeout(()=>{
+      const delayStep = delay+step*(i-1); 
+      const promise = createPromise(i, delayStep);
+      promise
+        .then(value=>Notify.success(value))
+        .catch(err=>Notify.failure(err));
+    }, delay);
  }
-}
+
 
 function createPromise(position, delay) {
   return new Promise((res, rej)=>{
     const shouldResolve = Math.random() > 0.3;
-    setTimeout(()=>{
+
       if (shouldResolve) {
         res(`✅ Fulfilled promise ${position} in ${delay}ms`);
       } else {
         rej(`❌ Rejected promise ${position} in ${delay}ms`);
       }
-    }, delay)
-  })
+    })
+  }
 
 }
  
