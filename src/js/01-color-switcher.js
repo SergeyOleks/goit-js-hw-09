@@ -5,6 +5,7 @@
 
  btnStart.addEventListener('click',()=>{
     btnStart.disabled = true;
+    btnStop.disabled = false;
     timerId = setInterval(()=>{
         body.style.backgroundColor = getRandomHexColor();
     }, 1000
@@ -14,6 +15,7 @@
  btnStop.addEventListener('click', ()=>{
     clearInterval(timerId);
     btnStart.disabled = false;
+    btnStop.disabled = true;
 });
 
 function getRandomHexColor() {
